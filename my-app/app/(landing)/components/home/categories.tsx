@@ -44,7 +44,7 @@ const Categories = () => {
     <div className="rounded-lg bg-gradient-to-r from-[#F1F1F1] to-[#F7F7F7] w-full aspect-square flex justify-center"key={index}>
       <div className="self-center">
        <Image
-              src={`/categories/${category.imgUrl}`}
+              src={`/Categories/${category.imgUrl}`}
                width={86}
                height="86"
                alt={category.name}
