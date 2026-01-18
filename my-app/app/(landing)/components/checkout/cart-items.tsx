@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import Button from "../ui/button";
-import { FiArrowRight, FiTrash2 } from "react-icons/fi";
+import { FiArrowRight, FiCreditCard, FiTrash2 } from "react-icons/fi";
 import priceFormatter from "@/app/utils/price-formatter";
 import { useRouter } from "next/dist/client/components/navigation";
+import CardWithHeader from "../ui/cart-with-header";
 
-const CartList = [
+const cartList = [
   {
     name: "SportsOn Product 1",
     category: "Running",
@@ -51,24 +52,20 @@ const CartList = [
 ];
 
 const CartItems = () => {
- const { push } = useRouter();
- 
-   const totalPrice = CartList.reduce(
-     (total, item) => total + item.price * item.Qty,
-     0
-   );
- 
-   const handleCheckout = () => {
-     push("/checkout");
-   };
+  const { push } = useRouter();
+
+  const totalPrice = cartList.reduce(
+    (total, item) => total + item.price * item.Qty,
+    0
+  );
+
+  const payment = () => {};
+  
   return(
-   <div className="bg-white">
-    <div className="px-5 py-4 border-b border-gray-200">
-     <div className="font-bold text-lg">Cart Items</div>
-    </div>
-    <div className="overflow-auto max-h-[300px]">
+    <CardWithHeader title="Cart Items">
+       <div className="overflow-auto max-h-[300px]">
       {
-      CartList.map((item, index) => (
+      cartList.map((item, index) => (
        <div className="border-b border-gray-200 p-4 flex gap-3" key={index}> 
         <div className="bg-primary-light aspect-square w-16 flex justify-center items-center">
          <Image
@@ -108,16 +105,14 @@ const CartItems = () => {
      </div>
        <Button
           variant="dark"
-          size="small"
           className="w-full mt-4"
-          onClick={handleCheckout}
+           onClick={() => push("/payment")}
         >
-          Checkout Now <FiArrowRight />
+         <FiCreditCard /> Proceed to Checkout 
         </Button>
     
-   </div>
-   </div>
-
+      </div>
+    </CardWithHeader>
   )
  }
 

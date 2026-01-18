@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="container mx-auto flex justify-between pt-14 pb-24">
         <div className="w-105">
           <Image
-            src="/logo-footer.svg"
+            src="/images/logo-footer.svg"
             alt="logo sporton footer"
             width={187}
             height={44}
@@ -22,7 +22,7 @@ const Footer = () => {
             <Link href="#">Home</Link>
             <Link href="#">Categories</Link>
             <Link href="#">Products</Link>
-            <Link href="#">About Us</Link>
+            <Link href="/about-us">About Us</Link>
           </div>
           <div className="flex gap-7 flex-col">
             <Link href="#">Instagram</Link>
