@@ -6,39 +6,20 @@ import Image from "next/image";
 import Button from "./button";
 import { FiArrowRight, FiTrash2 } from "react-icons/fi";
 import { useRouter } from "next/dist/client/components/navigation";
+import { useCartStore } from "@/app/hooks/use-cart-store";
+import { getImageUrl } from "@/app/lib/api";
 
-const CartList = [
-  {
-    name: "SportsOn Product 1",
-    category: "Running",
-    price: 450000,
-    imgUrl: "product-1.png",
-    Qty: 1,
-  },
-  {
-    name: "SportsOn Product 2",
-    category: "Running",
-    price: 250000,
-    imgUrl: "product-1.png",
-    Qty: 2,
-  },
-  {
-    name: "SportsOn Product 3",
-    category: "Running",
-    price: 230000,
-    imgUrl: "product-3.png",
-    Qty: 1,
-  }
-];
 
 
 
 
 const CartPopup = () => {
     const { push } = useRouter();
+    const {items, removeItem} = useCartStore();
 
-  const totalPrice = CartList.reduce(
-    (total, item) => total + item.price * item.Qty,
+
+  const totalPrice = items.reduce(
+    (total, item) => total + item.price * item.qty,
     0
   );
 
@@ -51,11 +32,11 @@ const CartPopup = () => {
       Shopping Cart 
      </div>
      {
-      CartList.map((item, index) => (
+      items.length ? items.map((item, index) => (
        <div className="border-b border-gray-200 p-4 flex gap-3" key={index}> 
         <div className="bg-primary-light aspect-square w-16 flex justify-center items-center">
          <Image
-          src={`/Products/${item.imgUrl}`}
+          src={getImageUrl(item.imageUrl)}
           width={60}
           height={60}
           alt={item.name}
@@ -65,7 +46,7 @@ const CartPopup = () => {
         <div className="self-center">
          <div className="text-sm font-medium">{item.name}</div> 
          <div className="flex gap-3 font-medium text-xs">
-          <div>{item.Qty}x</div>
+          <div>{item.qty}x</div>
           <div className="text-primary">{priceFormatter(item.price)}</div>
          </div>
         </div>
@@ -73,12 +54,14 @@ const CartPopup = () => {
             size="small"
             variant="ghost"
             className="w-7 h-7 p-0! self-center ml-auto"
+            onClick={() => removeItem(item._id)}
           >
             <FiTrash2 />
           </Button>
        </div>
-      ))
+      )): <div className="p-4 text-center text-gray-500">Your cart is empty</div>
      }
+     
 
      <div  className="border-t border-gray-200 p-4">
       <div className="flex justify-between font-semibold">
