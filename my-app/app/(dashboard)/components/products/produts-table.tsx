@@ -7,21 +7,21 @@ const ProductsTable = () => {
  const productData = [
     {
     name: "SportOn Product 1",
-    imageUrl: "/products/product-1.png",
+    imageUrl: "/Products/product-1.png",
     category: "Running",
     price: 289000,
     stock: 3,
   },
   {
     name: "SportOn Product 2",
-    imageUrl: "/products/product-2.png",
+    imageUrl: "/Products/product-2.png",
     category: "Running",
     price: 229000,
     stock: 5,
   },
   {
     name: "SportOn Product 3",
-    imageUrl: "/products/product-3.png",
+    imageUrl: "/Products/product-3.png",
     category: "Running",
     price: 350000,
     stock: 10,

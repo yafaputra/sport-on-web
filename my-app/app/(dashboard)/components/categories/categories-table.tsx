@@ -7,12 +7,12 @@ const CategoriesTable = () => {
  const categoriesData = [
      {
     name: "Running",
-    imageUrl: "/public/categories/category-running.png",
+    imageUrl: "/Categories/category-running.png",
     description: "lorem ipsum ",
   },
   {
     name: "Football",
-    imageUrl: "/public/categories/category-football.png",
+    imageUrl: "/Categories/category-football.png",
     description: "lorem ipsum ",
   },
 
