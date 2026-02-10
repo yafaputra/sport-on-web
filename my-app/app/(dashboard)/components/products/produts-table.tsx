@@ -1,32 +1,19 @@
-import Button from "@/app/(landing)/components/ui/button";
+import { getImageUrl } from "@/app/lib/api";
+import { Product } from "@/app/types";
 import priceFormetter from "@/app/utils/price-formatter";
 import Image from "next/image";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 
-const ProductsTable = () => {
- const productData = [
-    {
-    name: "SportOn Product 1",
-    imageUrl: "/Products/product-1.png",
-    category: "Running",
-    price: 289000,
-    stock: 3,
-  },
-  {
-    name: "SportOn Product 2",
-    imageUrl: "/Products/product-2.png",
-    category: "Running",
-    price: 229000,
-    stock: 5,
-  },
-  {
-    name: "SportOn Product 3",
-    imageUrl: "/Products/product-3.png",
-    category: "Running",
-    price: 350000,
-    stock: 10,
-  },
-];
+
+
+type ProductsTableProps = {
+  products: Product[];
+  onDelete?: (id: string) => void;
+  onEdit?: (product: Product) => void;
+
+};
+
+const ProductsTable = ({ products, onDelete, onEdit }: ProductsTableProps) => {
  
 
   return (
@@ -43,13 +30,13 @@ const ProductsTable = () => {
       
       </thead>
       <tbody>
-       {productData.map((product, index) => (
-        <tr key={index} className="border-b border-gray-200 last:border-b-0 ">
+       {products.map((product) => (
+        <tr key={product._id} className="border-b border-gray-200 last:border-b-0 ">
          <td className="px-6 py-4 font-medium">
           <div className="flex gap-2 items-center">
            <div className="aspect-square bg-gray-100 rounded-md">
               <Image
-                      src={product.imageUrl}
+                      src={getImageUrl(product.imageUrl)}
                       width={52}
                       height={52}
                       alt={product.name}
@@ -60,13 +47,17 @@ const ProductsTable = () => {
           </div>
          </td>
          <td className="px-6 py-4 font-medium">
-          <div className="rounded-md bg-gray-200 px-2 py-1 w-fit">{product.category}</div>
+          <div className="rounded-md bg-gray-200 px-2 py-1 w-fit">{product.category.name}</div>
          </td>
          <td className="px-6 py-4 font-medium">{priceFormetter(product.price)}</td>
          <td className="px-6 py-4 font-medium">{product.stock} Units</td>
          <td className="flex gap-3  px-6 py-7.5 items-center text-gray-600">
-          <button><FiEdit2 size={20}/></button>
-          <button><FiTrash2 size={20}/></button>
+          <button onClick={() => onEdit?.(product)} className="cursor-pointer">
+            <FiEdit2 size={20}/>
+          </button>
+          <button onClick={() => onDelete?.(product._id)} className="cursor-pointer">
+            <FiTrash2 size={20}/>
+          </button>
          </td>
         </tr>
 

@@ -2,28 +2,98 @@
 
 import Button from "@/app/(landing)/components/ui/button";
 import { FiPlus } from "react-icons/fi";
-import {  useState } from "react";
-import  CategoriesTable  from "../../components/categories/categories-table";
-import CategoriesModel from "../../components/categories/categories-model";
+import {   useEffect, useState } from "react";
 import BankInfoModal from "../../components/bank-info/bank-model";
 import BankInfoList from "../../components/bank-info/bank-info-list";
+import { Bank } from "@/app/types";
+import { getAllBanks } from "@/app/services/bank.service";
+import { deleteBank } from "@/app/services/bank.service";
+import { toast } from "react-toastify";
+import DeleteModal from "../../components/ui/modal-delete";
 
 const BankInfoManagement = () => {
-  const [isOpen, setOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [ banks, setBanks] = useState<Bank[]>([]);
+  const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
+
+
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const [bankToDelete, setBankToDelete] = useState("");
+
+  const fetchBanks = async () => {
+    try {
+      const data = await getAllBanks();
+      if (data) {
+        setBanks(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch banks:", error);
+    }
+  };
 
   const handleCloseModel = () => {
-    setOpen(false);
+    setModalOpen(false);
+    setSelectedBank(null);
   };
+
+  const handleEdit = (bank: Bank) => {
+    setSelectedBank(bank);
+    setModalOpen(true);
+  }
+
+  const handleDelete= (id: string) => {
+    setBankToDelete(id);
+    setDeleteModalOpen(true);
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!bankToDelete) return;
+    try {
+      await deleteBank(bankToDelete);
+      toast.success("Bank info deleted successfully!");
+      setDeleteModalOpen(false);
+      setBankToDelete("");
+      fetchBanks();
+    }
+    catch (error) {
+      console.error("Failed to delete bank info:", error);
+      toast.error("Failed to delete bank info.");
+    }
+  };
+
+
+
+
+  useEffect(() => {
+    (async () => {
+      await fetchBanks();
+    })();
+  }, []);
+
   return <div>
    <div className="flex justify-between items-center mb-10">
     <div>
      <h1 className="font-bold text-2xl">Bank Info Management</h1>
      <p className="opacity-50">Organize your products into categories.</p>
     </div>
-    <Button className="rounded-lg" onClick={() => setOpen(true)}> <FiPlus  size={24}/> Add Product</Button>
+    <Button className="rounded-lg" onClick={() => setModalOpen(true)}> <FiPlus  size={24}/> Add Product</Button>
    </div>
-   < BankInfoList  />
-   <BankInfoModal isOpen={isOpen} onClose={handleCloseModel} />
+   < BankInfoList 
+    banks={banks}
+    onEdit={handleEdit} 
+    onDelete={handleDelete} />
+   <BankInfoModal 
+    isOpen={isModalOpen} 
+    onClose={handleCloseModel} 
+    onSuccess={fetchBanks}
+    bank={selectedBank}
+     />
+    <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={handleDeleteConfirm}
+      />
    </div>;
 };
 export default BankInfoManagement;

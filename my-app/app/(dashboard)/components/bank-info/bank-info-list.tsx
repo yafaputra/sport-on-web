@@ -1,3 +1,4 @@
+import { Bank } from "@/app/types";
 import { FiCreditCard, FiEdit2, FiTrash2 } from "react-icons/fi";
 
 const bankData = [
@@ -18,12 +19,18 @@ const bankData = [
   },
 ];
 
-const BankInfoList = () => {
+type TBankInfoListProps = {
+  banks: Bank[];
+  onEdit: (bank: Bank) => void;
+  onDelete: (id: string) => void;
+};
 
+const BankInfoList = ( { banks, onEdit, onDelete }: TBankInfoListProps) => {
+ 
   return (
    <div className="grid grid-cols-3 gap-8" >
-    {bankData.map((bank, index) => (
-      <div key={index} className="bg-white rounded-lg border border-gray-200">
+    {banks.map((bank) => (
+      <div key={bank._id} className="bg-white rounded-lg border border-gray-200">
        <div className="flex justify-between p-5">
         <div className="flex gap-2 items-center">
          <div className="bg-blue-50 text-blue-600 rounded w-12 h-12 flex justify-center items-center">
@@ -36,8 +43,8 @@ const BankInfoList = () => {
 
          </div>
          <div className="flex gap-2 mt-5 text-gray-600">
-           <button className="cursor-pointer"><FiEdit2 size={20}/></button>
-           <button className="cursor-pointer"><FiTrash2 size={20}/></button>
+           <button className="cursor-pointer" onClick={() => onEdit(bank)}><FiEdit2 size={20} /></button>
+           <button className="cursor-pointer" onClick={() => onDelete(bank._id)}><FiTrash2 size={20}/></button>
          </div>
         </div>
 
